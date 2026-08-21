@@ -47,6 +47,7 @@ export default function Register() {
       password,
       options: {
         data: { full_name: fullName.trim() },
+        emailRedirectTo: `${window.location.origin}/auth/login`,
       },
     });
     setSubmitting(false);
