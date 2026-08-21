@@ -4,6 +4,7 @@ import { useNavigate, useLocation, Link } from 'react-router';
 import { motion } from 'framer-motion';
 import { Lock, Mail, User } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { toast } from '@/lib/toast';
 import AuthLayout, { inputClass, labelClass, errorClass, primaryButtonClass } from './AuthLayout';
 
 export default function Register() {
@@ -15,6 +16,9 @@ export default function Register() {
   const [error, setError] = useState('');
   const [info, setInfo] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resendCount, setResendCount] = useState(0);
+  const [cooldown, setCooldown] = useState(0);
 
   const params = new URLSearchParams(location.search);
   const returnTo = params.get('returnTo') || '/perfil';
@@ -24,6 +28,12 @@ export default function Register() {
       if (data.session) navigate(returnTo, { replace: true });
     });
   }, [navigate, returnTo]);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const t = window.setInterval(() => setCooldown((c) => (c <= 1 ? 0 : c - 1)), 1000);
+    return () => window.clearInterval(t);
+  }, [cooldown]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -54,6 +64,8 @@ export default function Register() {
     if (signUpError) {
       if (signUpError.message.toLowerCase().includes('already')) {
         setError('Este correo ya está registrado');
+        setInfo(`¿No te llegó el correo? Puedes reenviar la verificación a ${email.trim()}.`);
+        setCooldown(5);
       } else {
         setError('No se pudo crear la cuenta. Inténtalo de nuevo.');
       }
@@ -64,6 +76,41 @@ export default function Register() {
       return;
     }
     setInfo('Revisa tu correo para confirmar tu cuenta antes de iniciar sesión.');
+    setResendCount(0);
+    setCooldown(60);
+  };
+
+  const handleResend = async () => {
+    if (!email.trim()) {
+      setError('Ingresa tu correo para reenviar');
+      return;
+    }
+    if (cooldown > 0) return;
+    setResending(true);
+    setError('');
+    const { error: resendError } = await supabase.auth.resend({
+      type: 'signup',
+      email: email.trim(),
+      options: { emailRedirectTo: `${window.location.origin}/auth/login` },
+    });
+    setResending(false);
+    if (resendError) {
+      if (resendError.message.toLowerCase().includes('rate')) {
+        setError('Demasiados intentos. Espera 60s y vuelve a intentar.');
+        setCooldown(60);
+      } else if (resendError.message.toLowerCase().includes('already confirmed')) {
+        setError('Esta cuenta ya está confirmada. Inicia sesión.');
+      } else {
+        setError('No se pudo reenviar. Inténtalo de nuevo.');
+        toast.error(resendError.message);
+      }
+      return;
+    }
+    const next = resendCount + 1;
+    setResendCount(next);
+    setCooldown(60);
+    toast.success(`Correo reenviado (${next}) a ${email.trim()}`);
+    setInfo(`Correo reenviado (${next}). Revisa tu bandeja y spam en ${email.trim()}.`);
   };
 
   return (
@@ -140,23 +187,46 @@ export default function Register() {
           </motion.p>
         )}
         {info && (
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-sm text-ocheto-green-700 font-medium bg-ocheto-green-700/8 rounded-xl px-4 py-3"
+            className="text-sm text-ocheto-green-700 font-medium bg-ocheto-green-700/8 rounded-xl px-4 py-3 space-y-2"
           >
-            {info}
-          </motion.p>
+            <p>{info}</p>
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <button type="button" onClick={() => void handleResend()} disabled={resending || cooldown > 0} className="px-3.5 py-1.5 rounded-full bg-ocheto-green-700 text-white text-xs font-semibold disabled:opacity-50">
+                {resending ? 'Reenviando…' : cooldown > 0 ? `Reenviar en ${cooldown}s` : resendCount > 0 ? `Reenviar de nuevo (${resendCount})` : 'Reenviar correo'}
+              </button>
+              {resendCount > 0 && <span className="text-xs text-ocheto-coffee-700/60">Enviados: {resendCount + 1} · Revisa spam/promociones</span>}
+            </div>
+          </motion.div>
         )}
-        <motion.button
-          type="submit"
-          disabled={submitting}
-          whileHover={{ scale: 1.015 }}
-          whileTap={{ scale: 0.98 }}
-          className={primaryButtonClass}
-        >
-          {submitting ? 'Creando cuenta…' : 'Crear cuenta'}
-        </motion.button>
+        {!info ? (
+          <motion.button
+            type="submit"
+            disabled={submitting}
+            whileHover={{ scale: 1.015 }}
+            whileTap={{ scale: 0.98 }}
+            className={primaryButtonClass}
+          >
+            {submitting ? 'Creando cuenta…' : 'Crear cuenta'}
+          </motion.button>
+        ) : (
+          <div className="flex gap-2">
+            <motion.button
+              type="submit"
+              disabled={submitting}
+              whileHover={{ scale: 1.015 }}
+              whileTap={{ scale: 0.98 }}
+              className={primaryButtonClass + ' flex-1'}
+            >
+              {submitting ? 'Creando…' : 'Intentar de nuevo'}
+            </motion.button>
+            <Link to={`/auth/login${location.search}`} className="px-5 py-3 rounded-full border-2 border-ocheto-green-700/15 text-sm font-semibold text-ocheto-green-700 hover:bg-ocheto-green-700/5 flex items-center justify-center">
+              Ir a login
+            </Link>
+          </div>
+        )}
       </form>
     </AuthLayout>
   );
