@@ -62,12 +62,17 @@ export default function Register() {
     });
     setSubmitting(false);
     if (signUpError) {
-      if (signUpError.message.toLowerCase().includes('already')) {
+      const msg = signUpError.message.toLowerCase();
+      if (msg.includes('already')) {
         setError('Este correo ya está registrado');
         setInfo(`¿No te llegó el correo? Puedes reenviar la verificación a ${email.trim()}.`);
         setCooldown(5);
+      } else if (msg.includes('over_email') || msg.includes('rate limit') || msg.includes('429') || msg.includes('email rate')) {
+        setError('Límite de correos del plan gratuito de Supabase (4/hora). Espera una hora o configura un SMTP propio (Resend/Gmail) en Supabase Dashboard → Auth → SMTP para envíos ilimitados a ocheto.com.bo.');
+        toast.error('Límite de emails alcanzado. Intenta en una hora.');
       } else {
         setError('No se pudo crear la cuenta. Inténtalo de nuevo.');
+        toast.error(signUpError.message);
       }
       return;
     }
@@ -95,10 +100,15 @@ export default function Register() {
     });
     setResending(false);
     if (resendError) {
-      if (resendError.message.toLowerCase().includes('rate')) {
+      const rmsg = resendError.message.toLowerCase();
+      if (rmsg.includes('over_email') || rmsg.includes('rate limit') || rmsg.includes('429') || rmsg.includes('email rate')) {
+        setError('Límite de correos del plan gratuito (4/hora). Supabase bloqueó el reenvío. Espera una hora o el admin debe configurar SMTP propio en Supabase para ocheto.com.bo para envíos ilimitados.');
+        toast.error('Límite de emails (free plan). Espera 1h.');
+        setCooldown(60);
+      } else if (rmsg.includes('rate')) {
         setError('Demasiados intentos. Espera 60s y vuelve a intentar.');
         setCooldown(60);
-      } else if (resendError.message.toLowerCase().includes('already confirmed')) {
+      } else if (rmsg.includes('already confirmed')) {
         setError('Esta cuenta ya está confirmada. Inicia sesión.');
       } else {
         setError('No se pudo reenviar. Inténtalo de nuevo.');
