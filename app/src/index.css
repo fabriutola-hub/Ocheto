@@ -1,0 +1,381 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ===== Brand: Ocheto Greens ===== */
+    --ocheto-green-950: 104 26% 17%;
+    --ocheto-green-900: 104 27% 22%;
+    --ocheto-green-800: 104 28% 27%;
+    --ocheto-green-700: 104 29% 46%;
+    --ocheto-green-600: 104 30% 39%;
+    --ocheto-green-500: 104 31% 55%;
+    --ocheto-green-400: 104 32% 65%;
+    --ocheto-green-300: 104 30% 75%;
+    --ocheto-green-100: 104 28% 90%;
+
+    /* ===== Brand: Cream BG ===== */
+    --ocheto-cream-50: 39 47% 96%;
+    --ocheto-cream-100: 39 50% 92%;
+    --ocheto-cream-200: 38 45% 86%;
+    --ocheto-cream-300: 36 38% 75%;
+
+    /* ===== Brand: Coffee Browns ===== */
+    --ocheto-coffee-950: 18 38% 8%;
+    --ocheto-coffee-900: 18 38% 12%;
+    --ocheto-coffee-800: 22 45% 18%;
+    --ocheto-coffee-700: 22 50% 25%;
+    --ocheto-coffee-600: 24 42% 32%;
+    --ocheto-coffee-500: 26 38% 42%;
+    --ocheto-coffee-400: 28 30% 55%;
+
+    /* ===== Brand: Accents ===== */
+    --ocheto-caramel-500: 32 60% 60%;
+    --ocheto-caramel-600: 28 70% 50%;
+    --ocheto-berry-500: 348 60% 50%;
+    --ocheto-berry-600: 348 65% 42%;
+    --ocheto-matcha-500: 88 50% 50%;
+    --ocheto-gold-500: 42 85% 55%;
+
+    /* ===== shadcn tokens (mapped to brand) ===== */
+    --background: 39 47% 96%;
+    --foreground: 18 38% 8%;
+    --card: 39 47% 98%;
+    --card-foreground: 18 38% 8%;
+    --popover: 39 47% 98%;
+    --popover-foreground: 18 38% 8%;
+    --primary: 104 29% 46%;
+    --primary-foreground: 39 47% 96%;
+    --secondary: 39 50% 92%;
+    --secondary-foreground: 18 38% 12%;
+    --muted: 39 50% 92%;
+    --muted-foreground: 24 15% 40%;
+    --accent: 32 60% 60%;
+    --accent-foreground: 18 38% 12%;
+    --destructive: 348 65% 42%;
+    --destructive-foreground: 39 47% 96%;
+    --border: 38 35% 86%;
+    --input: 38 35% 86%;
+    --ring: 104 29% 46%;
+    --radius: 0.75rem;
+
+    /* ===== Sidebar tokens ===== */
+    --sidebar-background: 39 47% 96%;
+    --sidebar-foreground: 18 38% 8%;
+    --sidebar-primary: 104 29% 46%;
+    --sidebar-primary-foreground: 39 47% 96%;
+    --sidebar-accent: 39 50% 92%;
+    --sidebar-accent-foreground: 18 38% 12%;
+    --sidebar-border: 38 35% 86%;
+    --sidebar-ring: 104 29% 46%;
+  }
+
+  .dark {
+    --background: 104 26% 17%;
+    --foreground: 39 47% 96%;
+    --card: 104 27% 22%;
+    --card-foreground: 39 47% 96%;
+    --popover: 104 27% 22%;
+    --popover-foreground: 39 47% 96%;
+    --primary: 104 32% 58%;
+    --primary-foreground: 104 26% 17%;
+    --secondary: 104 28% 27%;
+    --secondary-foreground: 39 47% 96%;
+    --muted: 104 28% 27%;
+    --muted-foreground: 38 20% 65%;
+    --accent: 32 60% 60%;
+    --accent-foreground: 18 38% 12%;
+    --destructive: 348 60% 50%;
+    --destructive-foreground: 39 47% 96%;
+    --border: 104 28% 27%;
+    --input: 104 28% 27%;
+    --ring: 104 32% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: hsl(var(--ocheto-green-700));
+    color: hsl(var(--ocheto-cream-50));
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--ocheto-cream-100));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--ocheto-green-700));
+    border-radius: 6px;
+    border: 2px solid hsl(var(--ocheto-cream-100));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--ocheto-green-600));
+  }
+}
+
+@layer components {
+  .font-fraunces {
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+    font-variation-settings: 'SOFT' 30, 'WONK' 0;
+  }
+
+  .font-caveat {
+    font-family: 'Caveat', cursive;
+    font-weight: 600;
+  }
+
+  .font-display {
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+  }
+
+  /* ===== Brand utility classes ===== */
+  .text-ocheto-green-950 { color: hsl(var(--ocheto-green-950)); }
+  .text-ocheto-green-700 { color: hsl(var(--ocheto-green-700)); }
+  .text-ocheto-green-600 { color: hsl(var(--ocheto-green-600)); }
+  .text-ocheto-green-400 { color: hsl(var(--ocheto-green-400)); }
+
+  .bg-ocheto-green-950 { background-color: hsl(var(--ocheto-green-950)); }
+  .bg-ocheto-green-900 { background-color: hsl(var(--ocheto-green-900)); }
+  .bg-ocheto-green-700 { background-color: hsl(var(--ocheto-green-700)); }
+  .bg-ocheto-green-600 { background-color: hsl(var(--ocheto-green-600)); }
+
+  .bg-ocheto-cream-50 { background-color: hsl(var(--ocheto-cream-50)); }
+  .bg-ocheto-cream-100 { background-color: hsl(var(--ocheto-cream-100)); }
+  .bg-ocheto-cream-200 { background-color: hsl(var(--ocheto-cream-200)); }
+
+  .bg-ocheto-coffee-900 { background-color: hsl(var(--ocheto-coffee-900)); }
+  .bg-ocheto-coffee-700 { background-color: hsl(var(--ocheto-coffee-700)); }
+
+  .text-ocheto-cream-50 { color: hsl(var(--ocheto-cream-50)); }
+  .text-ocheto-cream-100 { color: hsl(var(--ocheto-cream-100)); }
+  .text-ocheto-coffee-900 { color: hsl(var(--ocheto-coffee-900)); }
+  .text-ocheto-coffee-700 { color: hsl(var(--ocheto-coffee-700)); }
+  .text-ocheto-caramel-500 { color: hsl(var(--ocheto-caramel-500)); }
+  .text-ocheto-gold-500 { color: hsl(var(--ocheto-gold-500)); }
+
+  .ocheto-subtitle {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+  }
+
+  /* ===== Texture / patterns ===== */
+  .grain-texture {
+    position: relative;
+  }
+  .grain-texture::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.4'/%3E%3C/svg%3E");
+    opacity: 0.08;
+    mix-blend-mode: multiply;
+    z-index: 1;
+  }
+
+  /* ===== Buttons - signature Ocheto ===== */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-semibold transition-all duration-300;
+    background-color: hsl(var(--ocheto-green-700));
+    color: hsl(var(--ocheto-cream-50));
+    box-shadow: 0 4px 14px hsla(var(--ocheto-green-700), 0.3);
+  }
+  .btn-primary:hover {
+    background-color: hsl(var(--ocheto-green-600));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px hsla(var(--ocheto-green-700), 0.4);
+  }
+
+  .btn-outline-light {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-semibold transition-all duration-300 border-2;
+    color: hsl(var(--ocheto-cream-50));
+    border-color: hsl(var(--ocheto-cream-50) / 0.5);
+    background-color: hsla(var(--ocheto-cream-50), 0.05);
+    backdrop-filter: blur(8px);
+  }
+  .btn-outline-light:hover {
+    background-color: hsl(var(--ocheto-cream-50));
+    color: hsl(var(--ocheto-green-900));
+    transform: translateY(-2px);
+  }
+
+  /* ===== Card hover lift ===== */
+  .hover-lift {
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 24px 48px -12px hsla(var(--ocheto-green-900), 0.25);
+  }
+
+  /* ===== Gradient text ===== */
+  .gradient-text {
+    background: linear-gradient(135deg, hsl(var(--ocheto-green-700)) 0%, hsl(var(--ocheto-caramel-500)) 50%, hsl(var(--ocheto-gold-500)) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .gradient-text-light {
+    background: linear-gradient(135deg, hsl(var(--ocheto-cream-50)) 0%, hsl(var(--ocheto-gold-500)) 50%, hsl(var(--ocheto-cream-50)) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* ===== Torn paper edges (reusable) ===== */
+  .torn-edge-top {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    pointer-events: none;
+    transform: rotate(180deg);
+  }
+  .torn-edge-bottom {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    pointer-events: none;
+  }
+
+  /* ===== Radial glow ===== */
+  .glow-radial {
+    background: radial-gradient(circle at center, var(--glow-color, hsl(var(--ocheto-green-700) / 0.25)) 0%, transparent 65%);
+  }
+
+  /* ===== Container ===== */
+  .container-ocheto {
+    @apply mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12 xl:px-16;
+  }
+
+  /* ===== Marquee ===== */
+  .marquee {
+    display: flex;
+    overflow: hidden;
+    gap: 4rem;
+    mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 88%, transparent 100%);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 4rem;
+    flex-shrink: 0;
+    animation: marquee 35s linear infinite;
+  }
+
+  /* ===== Decorative dotted bg ===== */
+  .dots-bg {
+    background-image: radial-gradient(circle, hsl(var(--ocheto-green-700) / 0.15) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+}
+
+@layer utilities {
+  /* Section padding */
+  .section-padding {
+    @apply py-20 sm:py-24 lg:py-32;
+  }
+
+  /* Tabular numerals for prices */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Disable scroll on body (used by overlays) */
+  .no-scroll {
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  /* 3D perspective helper */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  /* Hide scrollbar but allow scroll */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* ===== Animations (keyframes) ===== */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+@keyframes steam-rise {
+   0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.4; }
+  50% { transform: translateY(-30px) translateX(8px) scale(1.2); opacity: 0.6; }
+  100% { transform: translateY(-60px) translateX(-4px) scale(0.8); opacity: 0; }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.animate-marquee { animation: marquee 35s linear infinite; }
+.animate-pulse-slow { animation: pulse-slow 4s ease-in-out infinite; }
+.animate-steam { animation: steam-rise 3s ease-out infinite; }
+.animate-gradient { 
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite; 
+}
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, hsl(var(--ocheto-cream-200) / 0.4), transparent);
+  background-size: 1000px 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+/* ===== Reduced motion respect ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
